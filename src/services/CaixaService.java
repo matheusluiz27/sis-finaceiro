@@ -17,7 +17,7 @@ public class CaixaService {
 	private Double sumarizar(Set<Movimentacao> movimetacoes) {
 		Double saldo = 0.0;
 		for (Movimentacao movimentacao : movimetacoes) {
-			saldo = movimentacao.getValor();
+			saldo += movimentacao.getValor();
 		}
 		return saldo;
 	}
@@ -29,24 +29,50 @@ public class CaixaService {
 		return totalEntradas - totalSaidas;
 	}
 	
+	//Retorna o saldo total num mẽs
+		public Double getSaldoNumMes(Usuario usuario, Date data) {
+			Double totalEntradas = sumarizar(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.ENTRADA, data));
+			Double totalSaidas = sumarizar(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.SAIDA,data));
+			return totalEntradas - totalSaidas;
+		}
 	
+	//total de saidas num mês
 	public Double getValorTotalSaidasPorMes(Usuario usuario, Date data) throws Exception {
 		return sumarizar(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.SAIDA, data));
 	}
 	
+	//total de entradas num mês
 	public Double getValorTotalEntradasPorMes(Usuario usuario, Date data) throws Exception {
 		return sumarizar(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.ENTRADA, data));
 	}
 	
-	public Map<Categoria, Double> getTotaMovimentacoesPorCategoriaNumMes(Usuario usuario, Date data) throws Exception{
-		Set<Movimentacao> movimentacoes = new TreeSet<Movimentacao>(ms.buscarPorMesAno(usuario, data));		
+	//total de entradas de movimentações por categoria
+	public Map<Categoria, Double> getTotalEntrdaMovimentacoesPorCategoriaNumMes(Usuario usuario, Date data) throws Exception{
+		Set<Movimentacao> movimentacoes = new TreeSet<Movimentacao>(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.ENTRADA, data));		
 		Map<Categoria, Double> saldoPorCategorias = new HashMap<Categoria, Double>();
 		
 		for (Movimentacao movimentacao : movimentacoes) {
-			saldoPorCategorias.
+			if (saldoPorCategorias.containsKey(movimentacao.getCategoria())) {
+				double valorAtual = saldoPorCategorias.get(movimentacao.getCategoria());
+				saldoPorCategorias.put(movimentacao.getCategoria(), valorAtual + movimentacao.getValor());
+			}
 		}
 		
-		return null;
-		
+		return saldoPorCategorias;	
 	}
+	
+	//total de saídas de movimentações por categoria
+		public Map<Categoria, Double> getTotalSaidaMovimentacoesPorCategoriaNumMes(Usuario usuario, Date data) throws Exception{
+			Set<Movimentacao> movimentacoes = new TreeSet<Movimentacao>(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.SAIDA, data));		
+			Map<Categoria, Double> saldoPorCategorias = new HashMap<Categoria, Double>();
+			
+			for (Movimentacao movimentacao : movimentacoes) {
+				if (saldoPorCategorias.containsKey(movimentacao.getCategoria())) {
+					double valorAtual = saldoPorCategorias.get(movimentacao.getCategoria());
+					saldoPorCategorias.put(movimentacao.getCategoria(), valorAtual + movimentacao.getValor());
+				}
+			}
+			
+			return saldoPorCategorias;	
+		}
 }

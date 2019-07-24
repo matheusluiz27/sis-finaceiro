@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import entitites.Categoria;
-import entitites.Movimentacao;
 import entitites.Usuario;
 import enuns.TipoMovimentacao;
 import services.CaixaService;
@@ -57,14 +56,14 @@ public class CaixaTeste {
 			System.out.println("Marcos - Total saídas no mês atual: " + cs.getValorTotalSaidasPorMes(marcos, new Date()) 
 	                     		+ " Total entradas no mês atual: " + cs.getValorTotalEntradasPorMes(marcos, new Date()));
 			
-//			System.out.println("Total de entradas por categoria:");
-//			Set<Categoria> categorias = new HashSet<Categoria>(); 
-//			categorias.addAll(cs.getTotalMovimentacoesPorCategoriaNumMes(marcos, new Date(), TipoMovimentacao.ENTRADA).keySet());
-//			for (Categoria c : categorias) {
-//				System.out.print("categoria - " + c.getNome());
-//				System.out.println(", total entradas: " + cs.getTotalMovimentacoesPorCategoriaNumMes(marcos, new Date(), TipoMovimentacao.ENTRADA).get(c));
-//			}
-//			System.out.println();
+			System.out.println("Total de entradas por categoria:");
+			Set<Categoria> categorias = new HashSet<Categoria>(); 
+			categorias.addAll(cs.getTotalMovimentacoesPorCategoriaNumMes(marcos, new Date(), TipoMovimentacao.ENTRADA).keySet());
+			for (Categoria c : categorias) {
+				System.out.print("categoria - " + c.getNome());
+				System.out.println(", total entradas: " + cs.getTotalMovimentacoesPorCategoriaNumMes(marcos, new Date(), TipoMovimentacao.ENTRADA).get(c));
+			}
+			System.out.println();
 			System.out.println("Total de saídas por categoria:");
 			Set<Categoria> categorias1 = new HashSet<Categoria>(); 
 			categorias1.addAll(cs.getTotalMovimentacoesPorCategoriaNumMes(marcos, new Date(), TipoMovimentacao.SAIDA).keySet());

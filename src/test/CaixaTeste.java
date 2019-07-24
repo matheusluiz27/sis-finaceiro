@@ -35,6 +35,7 @@ public class CaixaTeste {
 			ms.cadastrarMovimentacoes(marcos, "wefd", sdf.parse("12/07/2019"), TipoMovimentacao.ENTRADA, 223.00,salario);
 			
 			ms.cadastrarMovimentacoes(marcos, "w9fd", sdf.parse("10/07/2019"), TipoMovimentacao.SAIDA, 322.00,contaAgua);
+			ms.cadastrarMovimentacoes(marcos, "w9fd", sdf.parse("11/07/2019"), TipoMovimentacao.SAIDA, 400.00,contaLuz);
 			
 			ms.cadastrarMovimentacoes(marcos, "adf", sdf.parse("08/07/2019"), TipoMovimentacao.ENTRADA, 500.00,salario);
 			ms.cadastrarMovimentacoes(marcos, "asdfge", sdf.parse("15/12/2018"), TipoMovimentacao.SAIDA, 203.00,contaLuz);
@@ -56,12 +57,20 @@ public class CaixaTeste {
 			System.out.println("Marcos - Total saídas no mês atual: " + cs.getValorTotalSaidasPorMes(marcos, new Date()) 
 	                     		+ " Total entradas no mês atual: " + cs.getValorTotalEntradasPorMes(marcos, new Date()));
 			
-			System.out.println("Total de entradas por categoria:");
-			Set<Categoria> categorias = new HashSet<Categoria>(); 
-			categorias.addAll(cs.getTotalEntrdaMovimentacoesPorCategoriaNumMes(marcos, new Date()).keySet());
-			for (Categoria c : categorias) {
+//			System.out.println("Total de entradas por categoria:");
+//			Set<Categoria> categorias = new HashSet<Categoria>(); 
+//			categorias.addAll(cs.getTotalMovimentacoesPorCategoriaNumMes(marcos, new Date(), TipoMovimentacao.ENTRADA).keySet());
+//			for (Categoria c : categorias) {
+//				System.out.print("categoria - " + c.getNome());
+//				System.out.println(", total entradas: " + cs.getTotalMovimentacoesPorCategoriaNumMes(marcos, new Date(), TipoMovimentacao.ENTRADA).get(c));
+//			}
+//			System.out.println();
+			System.out.println("Total de saídas por categoria:");
+			Set<Categoria> categorias1 = new HashSet<Categoria>(); 
+			categorias1.addAll(cs.getTotalMovimentacoesPorCategoriaNumMes(marcos, new Date(), TipoMovimentacao.SAIDA).keySet());
+			for (Categoria c : categorias1) {
 				System.out.print("categoria - " + c.getNome());
-				System.out.println(" total entradas: " + cs.getTotalEntrdaMovimentacoesPorCategoriaNumMes(marcos, new Date()).get(c));
+				System.out.println(", total entradas: " + cs.getTotalMovimentacoesPorCategoriaNumMes(marcos, new Date(), TipoMovimentacao.SAIDA).get(c));
 			}
 			
 		} catch (Exception e) {

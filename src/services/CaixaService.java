@@ -46,33 +46,21 @@ public class CaixaService {
 		return sumarizar(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.ENTRADA, data));
 	}
 	
-	//total de entradas de movimentações por categoria
-	public Map<Categoria, Double> getTotalEntrdaMovimentacoesPorCategoriaNumMes(Usuario usuario, Date data) throws Exception{
-		Set<Movimentacao> movimentacoes = new TreeSet<Movimentacao>(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.ENTRADA, data));		
+	//total de movimentações por categoria
+	public Map<Categoria, Double> getTotalMovimentacoesPorCategoriaNumMes(Usuario usuario, Date data, TipoMovimentacao tipoMovimentacao) throws Exception{
+		Set<Movimentacao> movimentacoes = new TreeSet<Movimentacao>(ms.buscarMovimentacoesPorTipoNumMes(usuario, tipoMovimentacao, data));		
 		Map<Categoria, Double> saldoPorCategorias = new HashMap<Categoria, Double>();
 		
 		for (Movimentacao movimentacao : movimentacoes) {
 			if (saldoPorCategorias.containsKey(movimentacao.getCategoria())) {
 				double valorAtual = saldoPorCategorias.get(movimentacao.getCategoria());
 				saldoPorCategorias.put(movimentacao.getCategoria(), valorAtual + movimentacao.getValor());
-			}
+			} else {
+				saldoPorCategorias.put(movimentacao.getCategoria(),movimentacao.getValor());
+			}	
 		}
 		
 		return saldoPorCategorias;	
 	}
 	
-	//total de saídas de movimentações por categoria
-		public Map<Categoria, Double> getTotalSaidaMovimentacoesPorCategoriaNumMes(Usuario usuario, Date data) throws Exception{
-			Set<Movimentacao> movimentacoes = new TreeSet<Movimentacao>(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.SAIDA, data));		
-			Map<Categoria, Double> saldoPorCategorias = new HashMap<Categoria, Double>();
-			
-			for (Movimentacao movimentacao : movimentacoes) {
-				if (saldoPorCategorias.containsKey(movimentacao.getCategoria())) {
-					double valorAtual = saldoPorCategorias.get(movimentacao.getCategoria());
-					saldoPorCategorias.put(movimentacao.getCategoria(), valorAtual + movimentacao.getValor());
-				}
-			}
-			
-			return saldoPorCategorias;	
-		}
 }

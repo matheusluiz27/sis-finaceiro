@@ -57,9 +57,9 @@ public class MovimentacaoTest {
 			System.out.println("Listando por mês expecífico");
 			System.out.println();
 			
-			for (Movimentacao m : ms.buscarPorMesAno(marcos, 03, 2019)) {
-				System.out.println(m);
-			}
+//			for (Movimentacao m : ms.buscarPorMesAno(marcos, 03, 2019)) {
+//				System.out.println(m);
+//			}
 			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

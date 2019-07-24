@@ -1,8 +1,12 @@
 package test;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import entitites.Categoria;
+import entitites.Movimentacao;
 import entitites.Usuario;
 import enuns.TipoMovimentacao;
 import services.CaixaService;
@@ -29,6 +33,9 @@ public class CaixaTeste {
 			ms.cadastrarMovimentacoes(marcos, "asdf", sdf.parse("01/02/2019"), TipoMovimentacao.SAIDA, 250.00,contaLuz);
 			ms.cadastrarMovimentacoes(marcos, "asdf", sdf.parse("12/02/2019"), TipoMovimentacao.SAIDA, 230.00,contaAgua);
 			ms.cadastrarMovimentacoes(marcos, "wefd", sdf.parse("12/07/2019"), TipoMovimentacao.ENTRADA, 223.00,salario);
+			
+			ms.cadastrarMovimentacoes(marcos, "w9fd", sdf.parse("10/07/2019"), TipoMovimentacao.SAIDA, 322.00,contaAgua);
+			
 			ms.cadastrarMovimentacoes(marcos, "adf", sdf.parse("08/07/2019"), TipoMovimentacao.ENTRADA, 500.00,salario);
 			ms.cadastrarMovimentacoes(marcos, "asdfge", sdf.parse("15/12/2018"), TipoMovimentacao.SAIDA, 203.00,contaLuz);
 			ms.cadastrarMovimentacoes(marcos, "qrgq", sdf.parse("19/12/2018"), TipoMovimentacao.ENTRADA, 20023.00,vendas);
@@ -38,10 +45,27 @@ public class CaixaTeste {
 			ms.cadastrarMovimentacoes(maria, "qrgq", sdf.parse("19/12/2018"), TipoMovimentacao.ENTRADA, 100.00, vendas);
 			ms.cadastrarMovimentacoes(maria, "gegqgy", sdf.parse("12/03/2019"), TipoMovimentacao.ENTRADA, 2100.00,vendas);
 			
+			System.out.println();
+			System.out.println();
+			
 			System.out.println("Total: marcos = " + cs.getSaldo(marcos) + " - Maria = " + cs.getSaldo(maria));
 			
+			System.out.println("Marcos - Saldo no mês atual: " + cs.getSaldoNumMes(marcos, new Date()));
+			System.out.println("Maria - Saldo no mês atual: " + cs.getSaldoNumMes(maria, new Date()));
+			
+			System.out.println("Marcos - Total saídas no mês atual: " + cs.getValorTotalSaidasPorMes(marcos, new Date()) 
+	                     		+ " Total entradas no mês atual: " + cs.getValorTotalEntradasPorMes(marcos, new Date()));
+			
+			System.out.println("Total de entradas por categoria:");
+			Set<Categoria> categorias = new HashSet<Categoria>(); 
+			categorias.addAll(cs.getTotalEntrdaMovimentacoesPorCategoriaNumMes(marcos, new Date()).keySet());
+			for (Categoria c : categorias) {
+				System.out.print("categoria - " + c.getNome());
+				System.out.println(" total entradas: " + cs.getTotalEntrdaMovimentacoesPorCategoriaNumMes(marcos, new Date()).get(c));
+			}
+			
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println(e.getMessage());
 		}
 	}
 

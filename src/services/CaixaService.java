@@ -30,11 +30,11 @@ public class CaixaService {
 	}
 	
 	//Retorna o saldo total num mẽs
-		public Double getSaldoNumMes(Usuario usuario, Date data) {
-			Double totalEntradas = sumarizar(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.ENTRADA, data));
-			Double totalSaidas = sumarizar(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.SAIDA,data));
-			return totalEntradas - totalSaidas;
-		}
+	public Double getSaldoNumMes(Usuario usuario, Date data) throws Exception {
+		Double totalEntradas = sumarizar(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.ENTRADA, data));
+		Double totalSaidas = sumarizar(ms.buscarMovimentacoesPorTipoNumMes(usuario, TipoMovimentacao.SAIDA, data));
+		return totalEntradas - totalSaidas;
+	}
 	
 	//total de saidas num mês
 	public Double getValorTotalSaidasPorMes(Usuario usuario, Date data) throws Exception {

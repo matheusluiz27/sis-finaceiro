@@ -28,39 +28,47 @@ public class MovimentacaoService {
 		return usuario.getMovimentacoes();
 	}
 	
-	//Listar movimentações por mês atual
-	public Set<Movimentacao> buscarMovimentacoesPorMesAtual(Usuario usuario) throws Exception {
-		Set<Movimentacao> movimentacoesMesAtual = new TreeSet<Movimentacao>(usuario.getMovimentacoes());
-		movimentacoesMesAtual.removeIf(x -> x.getData().getMonth() != c.get(Calendar.MONTH) && x.getData().getYear() != c.get(Calendar.YEAR));
-		if (movimentacoesMesAtual.isEmpty()) {
-			throw new Exception("Não há movimentações cadastradas nesse mês");
-		}
-		return movimentacoesMesAtual;
-	}
-	
 	//Listar movimentacoes por mes e ano específicos
 	public Set<Movimentacao> buscarPorMesAno(Usuario usuario, Date data) throws Exception {
-		Set<Movimentacao> movimentacoes = new TreeSet<Movimentacao>(usuario.getMovimentacoes());
-		movimentacoes.removeIf(x -> x.getData().getMonth() != data.getMonth() && x.getData().getYear() != data.getYear());
+		Set<Movimentacao> filterMovimrntacoes = new TreeSet<Movimentacao>();
+		filterMovimrntacoes.addAll(usuario.getMovimentacoes());
+		filterMovimrntacoes.removeIf(x -> x.getData().getMonth() != data.getMonth() && x.getData().getYear() != data.getYear());
+		if (filterMovimrntacoes.isEmpty()) {
+			throw new Exception("Não há movimentações cadastradas nesse mês");
+		}
+		return filterMovimrntacoes;
+	}
+	
+	public Set<Movimentacao> buscarPorMesAno(Set<Movimentacao> movimentacoes, Date data) throws Exception {
+		Set<Movimentacao> filterMovimrntacoes = new TreeSet<Movimentacao>();
+		filterMovimrntacoes.addAll(movimentacoes);
+		filterMovimrntacoes.removeIf(x -> x.getData().getMonth() != data.getMonth() || x.getData().getYear() != data.getYear());
 		if (movimentacoes.isEmpty()) {
 			throw new Exception("Não há movimentações cadastradas nesse mês");
 		}
-		return movimentacoes;
+		return filterMovimrntacoes;
 	}
 	
 	//Listar por tipo
 	public Set<Movimentacao> buscarMovimentacoesPorTipo(Usuario usuario, TipoMovimentacao tipoMovimentacao) {
-		Set<Movimentacao> movimentacoes = new TreeSet<Movimentacao>(usuario.getMovimentacoes());
-		movimentacoes.removeIf(x -> x.getTipoMovimentacao() != tipoMovimentacao);
-		return movimentacoes;
+		Set<Movimentacao> filterMovimrntacoes = new TreeSet<Movimentacao>();
+		filterMovimrntacoes.addAll(usuario.getMovimentacoes());
+		filterMovimrntacoes.removeIf(x -> x.getTipoMovimentacao() != tipoMovimentacao);
+		return filterMovimrntacoes;
+	}
+	
+	public Set<Movimentacao> buscarMovimentacoesPorTipo(Set<Movimentacao> movimentacoes, TipoMovimentacao tipoMovimentacao) {
+		Set<Movimentacao> filterMovimrntacoes = new TreeSet<Movimentacao>();
+		filterMovimrntacoes.addAll(movimentacoes);
+		filterMovimrntacoes.removeIf(x -> x.getTipoMovimentacao() != tipoMovimentacao);
+		return filterMovimrntacoes;
 	}
 	
 	//Listar por tipo em um mês
-	public Set<Movimentacao> buscarMovimentacoesPorTipoNumMes(Usuario usuario, TipoMovimentacao tipoMovimentacao, Date data) {
-		Set<Movimentacao> movimentacoes = new TreeSet<Movimentacao>(usuario.getMovimentacoes());
-		movimentacoes.removeIf(x -> x.getTipoMovimentacao() != tipoMovimentacao 
-								&& x.getData().getMonth() != data.getMonth() 
-								&& x.getData().getYear() != data.getYear());
+	public Set<Movimentacao> buscarMovimentacoesPorTipoNumMes(Usuario usuario, TipoMovimentacao tipoMovimentacao, Date data) throws Exception {
+		Set<Movimentacao> movimentacoes = new TreeSet<Movimentacao>();
+		movimentacoes.addAll(this.buscarMovimentacoesPorTipo(usuario.getMovimentacoes(), tipoMovimentacao));
+		movimentacoes.retainAll(buscarPorMesAno(movimentacoes, data));
 		return movimentacoes;
 	}
 }

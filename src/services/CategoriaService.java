@@ -1,5 +1,6 @@
 package services;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import entitites.Categoria;
@@ -7,24 +8,35 @@ import entitites.Usuario;
 import enuns.TipoMovimentacao;
 
 public class CategoriaService {
-	
-	//Criar categoria
-	public void criarCategoria(Usuario usuario, String nome, TipoMovimentacao  tipo) throws Exception {
-			if (buscarCategoriaPorNome(usuario, nome) != null)
-				throw new Exception("Já existe categoria com o nome: " + nome);
+
+	// Criar categoria
+	public void criarCategoria(Usuario usuario, String nome, TipoMovimentacao tipo) throws Exception {
+		if (buscarCategoriaPorNome(usuario, nome) != null)
+			throw new Exception("Já existe categoria com o nome: " + nome);
 
 		usuario.getCategorias().add(new Categoria(nome, tipo, usuario));
 		System.out.println("Categoria criada");
 	}
-	
-	//listar categorias por usuário
-	public Set<Categoria> listarCategoriaPorUsuario(Usuario usuario) throws Exception{
+
+	// listar categorias por usuário
+	public Set<Categoria> listarCategoriaPorUsuario(Usuario usuario) throws Exception {
 		if (usuario.getCategorias().isEmpty())
 			throw new Exception("O usuário não possui categorias");
 		return usuario.getCategorias();
 	}
-	
-	//Buscar categoria por nome
+
+	// listar categorias por usuário
+	public Set<Categoria> listarCategoriaPorUsuarioTipo(Usuario usuario, TipoMovimentacao tipoMovimentacao) throws Exception {
+		if (usuario.getCategorias().isEmpty())
+			throw new Exception("O usuário não possui categorias");
+		
+		Set<Categoria> categorias = new HashSet<Categoria>();
+		categorias.addAll(usuario.getCategorias());
+		categorias.removeIf(x -> x.getTipo() != tipoMovimentacao);
+		return categorias;
+	}
+
+	// Buscar categoria por nome
 	public Categoria buscarCategoriaPorNome(Usuario usuario, String nome) throws Exception {
 		if (usuario.getCategorias().isEmpty()) {
 			throw new Exception("O usuário não possui categorias");
@@ -35,12 +47,12 @@ public class CategoriaService {
 		}
 		return null;
 	}
-	
-	//Excluir categoria
+
+	// Excluir categoria
 	public void excluirCategoria(Usuario usuario, String nome) throws Exception {
 		if (buscarCategoriaPorNome(usuario, nome) == null)
 			throw new Exception("Essa categoria não existe");
-		
+
 		usuario.getCategorias().remove(buscarCategoriaPorNome(usuario, nome));
 		System.out.println("Categoria removida com sucesso");
 	}
